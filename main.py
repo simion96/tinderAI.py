@@ -6,10 +6,12 @@ import spotipy
 import spotipy.util as util
 import json
 import urllib2
+from pprint import pprint
 import requests
 
 fbToken = os.getenv('FB_TOKEN')
 fbID = os.getenv('FB_ID')
+
 
 
 def pp_json(json_thing, sort=True, indents=4):
@@ -46,15 +48,23 @@ tinder_headers2 = {'X-Auth-Token': tinder_token,
                    'locale': 'en-GB'
                   }
 r = requests.post(url2, headers = tinder_headers2)
-recs_json = r.text
 with open('data.txt', 'w') as outfile:
     json.dump(r.text, outfile, sort_keys=True, indent=4)
+with open('data.txt') as data_file:
+    recs_json = json.load(data_file)
+pprint(recs_json)
 print r.url
 print r.headers
 print r.request
 print r.status_code
-print r.text
 
 
+print type(recs_json)
+
+
+like_headers2 = {'X-Auth-Token': tinder_token,
+                   'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
+                   'firstPhotoID': 'en-GB'
+                   }
 
 
