@@ -69,18 +69,27 @@ print r.request
 print r.status_code
 
 dict = json.loads(recs_json2)
-
+liked = ""
 print type(dict)
+print "------------LADIES--------------"
 for i in dict['results']:
-    print i['_id']
+    link = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
+    liking_header = {'X-Auth-Token': tinder_token,
+                     'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
+                     'firstPhotoID': ''+str(i['photos'][0]['id'])
+                     }
+    likereq = requests.get(link, headers = liking_header)
+    #print i['name'] + ' - ' +  i['_id']
+    print 'status: ' + str(likereq.status_code) + ' text: ' + str(likereq.text)
+#    liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
+    #print "photoid " + str(i['photos'][0]['id'])
+
+#with open("liked", "w") as text_file:
+#    text_file.write(liked)
 #print type(recs_json2)
 #pprint(recs_json2)
-
-
 
 like_headers2 = {'X-Auth-Token': tinder_token,
                    'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
                    'firstPhotoID': 'en-GB'
                    }
-
-
