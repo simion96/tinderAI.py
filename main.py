@@ -12,6 +12,12 @@ fbToken = os.getenv('FB_TOKEN')
 fbID = os.getenv('FB_ID')
 
 
+def pp_json(json_thing, sort=True, indents=4):
+    if type(json_thing) is str:
+        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
+    else:
+        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
+    return None
 
 
 url = 'https://api.gotinder.com/auth'
@@ -26,6 +32,13 @@ print r.status_code
 
 print 'token is: ' + str(fbToken)
 print 'fbid is: ' + str(fbID)
-print json.dumps(r.text, indent=4, sort_keys=True)
+
+rjson =  json.loads(r.text)
+print "token is: " + rjson['token']
+tinder_token = rjson['token']
+
+
+
+
 
 
