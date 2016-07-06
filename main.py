@@ -12,7 +12,16 @@ import requests
 fbToken = os.getenv('FB_TOKEN')
 fbID = os.getenv('FB_ID')
 
-
+def byteify(input):
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
 
 def pp_json(json_thing, sort=True, indents=4):
     if type(json_thing) is str:
@@ -52,14 +61,21 @@ with open('data.txt', 'w') as outfile:
     json.dump(r.text, outfile, sort_keys=True, indent=4)
 with open('data.txt') as data_file:
     recs_json = json.load(data_file)
-pprint(recs_json)
+#pprint(recs_json)
+recs_json2 = byteify(recs_json)
 print r.url
 print r.headers
 print r.request
 print r.status_code
 
+dict = json.loads(recs_json2)
 
-print type(recs_json)
+print type(dict)
+for i in dict['results']:
+    print i['_id']
+#print type(recs_json2)
+#pprint(recs_json2)
+
 
 
 like_headers2 = {'X-Auth-Token': tinder_token,
