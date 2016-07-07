@@ -5,6 +5,7 @@ import os
 import spotipy
 import spotipy.util as util
 import json
+import time
 import urllib2
 from pprint import pprint
 import requests
@@ -69,10 +70,12 @@ print r.request
 print r.status_code
 
 dict = json.loads(recs_json2)
-liked = ""
+with open("liked", "r") as text_file:
+    liked = text_file.read()
 print type(dict)
 print "------------LADIES--------------"
 for i in dict['results']:
+    time.sleep(1)
     link = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
     liking_header = {'X-Auth-Token': tinder_token,
                      'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
@@ -81,11 +84,11 @@ for i in dict['results']:
     likereq = requests.get(link, headers = liking_header)
     #print i['name'] + ' - ' +  i['_id']
     print 'status: ' + str(likereq.status_code) + ' text: ' + str(likereq.text)
-#    liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
+    liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
     #print "photoid " + str(i['photos'][0]['id'])
 
-#with open("liked", "w") as text_file:
-#    text_file.write(liked)
+with open("liked", "w") as text_file:
+    text_file.write(liked)
 #print type(recs_json2)
 #pprint(recs_json2)
 
