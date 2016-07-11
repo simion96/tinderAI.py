@@ -68,17 +68,20 @@ print r.url
 print r.headers
 print r.request
 print r.status_code
+print json.dumps(json.loads(r.text), indent =4)
 
 dict = json.loads(recs_json2)
-liked = ""
-with open("liked", "r") as text_file:
-    liked = text_file.read()
+
 print type(dict)
 print "------------LADIES--------------"
 
-
-
-def like_recs(liked):
+def like_recs():
+    liked = ""
+    with open("liked", "r") as text_file:
+        liked = text_file.read()
+    instagrams = ""
+    with open("instagrams", "r") as text_file:
+        instagrams = text_file.read()
     for i in dict['results']:
         time.sleep(1)
         link = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
@@ -90,11 +93,20 @@ def like_recs(liked):
         #print i['name'] + ' - ' +  i['_id']
         print 'status: ' + str(likereq.status_code) + ' text: ' + str(likereq.text)
         liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
+        try:
+            if 'instagram' in i:
+              instagrams+= str(i['instagram']['username'] + " ")
+            else:
+                print "nnonono"
+        except KeyError as ex:
+            print 'nah mate'
         #print "photoid " + str(i['photos'][0]['id'])
     with open("liked", "w") as text_file:
         text_file.write(liked)
+    with open("instagrams", "w") as text_file:
+        text_file.write(instagrams)
 
-like_recs(liked)
+like_recs()
 
 #print type(recs_json2)
 #pprint(recs_json2)
@@ -103,3 +115,8 @@ like_headers2 = {'X-Auth-Token': tinder_token,
                    'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
                    'firstPhotoID': 'en-GB'
                    }
+
+
+
+
+
