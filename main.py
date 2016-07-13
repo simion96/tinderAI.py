@@ -81,7 +81,7 @@ print "------------LADIES--------------"
 def like_recs():
     counter = 0
     try:
-        while counter < 3:
+        while counter < 20:
             resultsr = get_recs()
             results = resultsr['results']
             liked = ""
@@ -98,7 +98,7 @@ def like_recs():
                                  'firstPhotoID': ''+str(i['photos'][0]['id'])
                                  }
                 likereq = requests.get(link, headers = liking_header)
-                #print i['name'] + ' - ' +  i['_id']
+                print i['name'] + ' - ' +  i['_id']
                 print 'status: ' + str(likereq.status_code) + ' text: ' + str(likereq.text)
                 liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
                 try:
