@@ -1,22 +1,29 @@
 import numpy as np
 from skimage.feature import hog
-from scipy.misc import imread,imresize
+from scipy.misc import imread,imresize,imsave
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
+import matplotlib.pyplot as plt
+import glob
 import pickle
+from PIL import Image
+import scipy.misc
 
 if __name__ == '__main__':
     #load the detector
     clf = pickle.load( open("svm.detector","rb"))
 
-    #now load a test image and get the hog features.
-    test_image = imread('2ndacc/testing/105',1)
-    test_image = imresize(test_image, (200,200))
-
-    hog_features = hog(test_image, orientations=12, pixels_per_cell=(16, 16),
-                    cells_per_block=(1, 1))
     identifiers = ['good', 'bad']
-    result_type = clf.predict(hog_features)
-    print "the image provided is: " + identifiers[result_type]
+
+    source = glob.glob("2ndacc/testing/*")
+    counter = 0
+    for i in source:
+        testing = imread(i, 1)
+        testing = imresize(testing, (200, 200))
+        hog_features = hog(testing, orientations=12, pixels_per_cell=(16, 16),
+                           cells_per_block=(1, 1))
+        result_type = clf.predict(hog_features)
+        Image.open(i).save('./2ndacc/AIResults/svmHOG/' + str(identifiers[result_type])+ str(counter)+".jpg")
+        counter +=1
 
 
