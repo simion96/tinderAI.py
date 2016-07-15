@@ -26,8 +26,8 @@ import matplotlib
 import pickle
 
 
-good =  glob.glob("2ndacc/good/*")
-bad = glob.glob("2ndacc/bad/*")
+good =  glob.glob("./../2ndacc/good/*")
+bad = glob.glob("./../2ndacc/bad/*")
 
 print good
 data = []
@@ -56,4 +56,4 @@ for i in bad:
 print ' training svm'
 clf = LinearSVC(dual=False, verbose=1)
 clf.fit(data, labels)
-pickle.dump(clf, open("svm.detector", "wb"))
+pickle.dump(clf, open("svmhog.detector", "wb"))
