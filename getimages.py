@@ -1,9 +1,11 @@
 import urllib
 import re
+import time
 
 regexRule = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
 extension = ".jpg"
-liked, round = ""
+liked = ""
+round = ""
 roundIdentifier = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 with open("liked", "r") as text_file:
     liked = text_file.read()
@@ -18,10 +20,10 @@ name = folder + str(counter)
 
 #urllib.urlretrieve("http://images.gotinder.com/5553606c7edc79cb1fa8ad5a/18d73531-3dc5-438e-9e21-52b4d5271dcc.jpg", "name")
 links = re.findall(regexRule, liked)
-print links
+#print links
 
 for link in links:
-    urllib.urlretrieve(link, name)
+    urllib.urlretrieve(link, folder+link[27:51]+extension)
     counter+=1
     name = folder + str(counter)+round+extension
 

@@ -29,19 +29,31 @@ def pp_json(json_thing, sort=True, indents=4):
         print(json.dumps(json_thing, sort_keys=sort, indent=indents))
     return None
 
+def write_file(file, data):
+    with open(file, 'w') as outfile:
+        outfile.write(data)
 
-url = 'https://api.gotinder.com/auth'
-headers ={'Content-Type': 'application/json', 'User-Agent':'Tinder/4.8.2 (iPhone; iOS 9.1; Scale/2.00)'}
-payload = {'force_refresh' : 'False', 'facebook_id' : fbID, 'facebook_token' : fbToken}
-r = requests.post(url, headers=headers, data = json.dumps(payload))
+def read_file(file):
+    with open(file, 'r') as outfile:
+        return outfile.read()
+
+def initialize():
+    url = 'https://api.gotinder.com/auth'
+    headers = {'Content-Type': 'application/json', 'User-Agent': 'Tinder/4.8.2 (iPhone; iOS 9.1; Scale/2.00)'}
+    payload = {'force_refresh': 'False', 'facebook_id': fbID, 'facebook_token': fbToken}
+    r = requests.post(url, headers=headers, data=json.dumps(payload))
+    #print r.text
+    rjson = json.loads(r.text)
+    print "token is: " + rjson['token']
+    return rjson['token']
+
+tinder_token = initialize()
 
 
-print 'token is: ' + str(fbToken)
-print 'fbid is: ' + str(fbID)
+#print 'token is: ' + str(fbToken)
+#print 'fbid is: ' + str(fbID)
 
-rjson =  json.loads(r.text)
-print "token is: " + rjson['token']
-tinder_token = rjson['token']
+
 
 tinder_headers = {'X-Auth-Token': tinder_token,
                   'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore')
@@ -61,16 +73,13 @@ def get_recs():
         json.dump(r.text, outfile, sort_keys=True, indent=4)
     with open('data.txt') as data_file:
         recs_json = json.load(data_file)
-    #pprint(recs_json)
     recs_json2 = byteify(recs_json)
     print r.url
     print r.headers
     print r.request
     print r.status_code
-    #print json.dumps(json.loads(r.text), indent =4) - prints the request
-
     dict = json.loads(recs_json2)
-    return dict
+    return dict['results']
 
 #print type(dict)
 print "------------LADIES--------------"
@@ -79,14 +88,9 @@ def like_recs():
     counter = 0
     try:
         while counter < 20:
-            resultsr = get_recs()
-            results = resultsr['results']
-            liked = ""
-            with open("liked", "r") as text_file:
-                liked = text_file.read()
-            instagrams = ""
-            with open("instagrams", "r") as text_file:
-                instagrams = text_file.read()
+            results = get_recs()
+            liked = read_file("liked")
+            instagrams = read_file("instagrams")
             for i in results:
                 time.sleep(1)
                 link = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
@@ -102,18 +106,13 @@ def like_recs():
                     if 'instagram' in i:
                       instagrams+= str(i['instagram']['username'] + " ")
                     else:
-                        print "nnonono"
+                        print "no instagram mate soz"
                 except KeyError as ex:
                     print 'nah mate'
                 #print "photoid " + str(i['photos'][0]['id'])
-            with open("liked", "w") as text_file:
-                text_file.write(liked)
-            with open("instagrams", "w") as text_file:
-                text_file.write(instagrams)
-            #resultsraw = get_recs()
-            #results = resultsraw['results']
+            write_file("liked", liked)
+            write_file("instagrams", instagrams)
             counter += 1
-
 
     except Exception as ex:
         print "hit an exception i guess"
