@@ -13,12 +13,11 @@ warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 
 if __name__ == '__main__':
     #load the detector
-    clf = pickle.load( open("svmhog.detector","rb"))
+    clf = pickle.load( open("svmravel.detector","rb"))
 
     identifiers = ['good', 'bad']
 
-    source = glob.glob("../2ndacc/testing/*")
-    print source;
+    source = glob.glob("./../2ndacc/testing/*")
     counter = 0
     for i in source:
         testing = imread(i, 1)
@@ -26,7 +25,7 @@ if __name__ == '__main__':
         hog_features = hog(testing, orientations=12, pixels_per_cell=(16, 16),
                            cells_per_block=(1, 1))
         result_type = clf.predict(hog_features)
-        Image.open(i).save('../2ndacc/AIResults/svmHOG/' + str(identifiers[result_type])+ str(counter)+".jpg")
+        Image.open(i).save('./../2ndacc/AIResults/svmRavel/' + str(identifiers[result_type])+ str(counter)+".jpg")
         counter +=1
 
 

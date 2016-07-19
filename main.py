@@ -1,9 +1,6 @@
 import pprint
 import sys
 import os
-
-import spotipy
-import spotipy.util as util
 import json
 import time
 import urllib2
@@ -135,8 +132,8 @@ def get_updates():
     print json.dumps(json.loads(r3.text), indent=4)
     return r3.text
 
-
-like_recs()
+while True:
+    like_recs()
 
 #print type(recs_json2)
 #pprint(recs_json2)

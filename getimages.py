@@ -2,10 +2,15 @@ import urllib
 import re
 
 regexRule = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
-
-liked = ""
+extension = ".jpg"
+liked, round = ""
+roundIdentifier = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 with open("liked", "r") as text_file:
     liked = text_file.read()
+with open("identifier.txt", "r") as text_file:
+    round = text_file.read()
+if round == "":
+    round = "A"
 folder = "ladies/"
 counter = 0
 name = folder + str(counter)
@@ -18,7 +23,12 @@ print links
 for link in links:
     urllib.urlretrieve(link, name)
     counter+=1
-    name = folder + str(counter)
+    name = folder + str(counter)+round+extension
+
+open("identifier.txt", "w").close()
+if (round != "Z"):
+    with open("identifier.txt", "w") as text_file:
+        text_file.write(roundIdentifier[roundIdentifier.index(round)+1])
 
 
 #print newS
