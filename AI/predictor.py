@@ -49,7 +49,7 @@ class Predictor(object):
                            cells_per_block=(1, 1))
         result_type = clf.predict(hog_features)
         # i[18:-4] - only id part of the filename
-        print "source in predictor is: " + source
+        #print "source in predictor is: " + source
         Image.open(source).save('2ndacc/AIResults/svmHOG1/' + str(identifiers[result_type]) + source[9:-4] + ".jpg")
-        print source[9:-4]
+        #print source[9:-4]
         return str(identifiers[result_type])

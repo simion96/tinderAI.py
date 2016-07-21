@@ -165,7 +165,7 @@ def like_recs_AI():
             #img - tinder img url, path = path on physical device, urllib saves the picture
             img = str(i['photos'][0]['url'])
             path = folder+img[27:51]+extension
-            print "image is " + str(i['photos'][0]['url'])
+            #print "image is " + str(i['photos'][0]['url'])
             urllib.urlretrieve(str(i['photos'][0]['url']), path)
             result = Predictor.predict(path)
             print 'AIresult is: ' + result
@@ -197,8 +197,8 @@ def like_recs_AI():
 
 #while True:
 #    like_recs()
-
-like_recs_AI()
+while True:
+    like_recs_AI()
 
 #print type(recs_json2)
 #pprint(recs_json2)
