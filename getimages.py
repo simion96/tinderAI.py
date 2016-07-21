@@ -33,5 +33,6 @@ if (round != "Z"):
         text_file.write(roundIdentifier[roundIdentifier.index(round)+1])
 
 
+print ""
 #print newS
 #print type(newS)
