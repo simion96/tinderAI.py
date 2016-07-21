@@ -7,6 +7,20 @@ import urllib2
 from pprint import pprint
 import requests
 import datetime
+import numpy as np
+from skimage.feature import hog
+from scipy.misc import imread,imresize,imsave
+from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
+import matplotlib.pyplot as plt
+import glob
+import pickle
+import urllib
+from PIL import Image
+from AI.predictor import Predictor
+import scipy.misc
+import warnings
+warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 
 fbToken = os.getenv('FB_TOKEN')
 fbID = os.getenv('FB_ID')
@@ -131,8 +145,60 @@ def get_updates():
     print json.dumps(json.loads(r3.text), indent=4)
     return r3.text
 
-while True:
-    like_recs()
+def like_recs_AI():
+    folder = "ladiesAI/"
+    extension = ".jpg"
+    counter = 0
+    #try:
+    while True:
+        results = get_recs()
+        liked = read_file("liked")
+        instagrams = read_file("instagrams")
+        for i in results:
+            time.sleep(1)
+            like = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
+            dislike = 'https://api.gotinder.com/pass/{0}'.format(i["_id"])
+            liking_header = {'X-Auth-Token': tinder_token,
+                             'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
+                             'firstPhotoID': '' + str(i['photos'][0]['id'])
+                             }
+            #img - tinder img url, path = path on physical device, urllib saves the picture
+            img = str(i['photos'][0]['url'])
+            path = folder+img[27:51]+extension
+            print "image is " + str(i['photos'][0]['url'])
+            urllib.urlretrieve(str(i['photos'][0]['url']), path)
+            result = Predictor.predict(path)
+            print 'AIresult is: ' + result
+
+            if result == "G":
+                req = requests.get(like, headers = liking_header)
+                print 'status: ' + str(req.status_code) + ' text: ' + str(req.text)
+            elif result == "B":
+                req = requests.get(dislike, headers = liking_header)
+                print 'status: ' + str(req.status_code) + ' text: ' + str(req.text)
+
+            print i['name'] + ' - ' + i['_id']
+            liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
+            try:
+                if 'instagram' in i:
+                    instagrams += str(i['instagram']['username'] + " ")
+                else:
+                    print "no instagram mate soz"
+            except KeyError as ex:
+                print 'nah mate'
+                # print "photoid " + str(i['photos'][0]['id'])
+        write_file("liked", liked)
+        write_file("instagrams", instagrams)
+        counter += 1
+
+    #except Exception as ex:
+    #    print "hit an exception i guess"
+    #    print ex
+
+#while True:
+#    like_recs()
+
+like_recs_AI()
 
 #print type(recs_json2)
 #pprint(recs_json2)

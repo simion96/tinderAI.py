@@ -15,7 +15,8 @@ if __name__ == '__main__':
     #load the detector
     clf = pickle.load( open("svmhog.detector","rb"))
 
-    identifiers = ['good', 'bad']
+    #good/bad
+    identifiers = ['G', 'B']
 
     source = glob.glob("../2ndacc/testing/*")
     print source;
@@ -26,7 +27,29 @@ if __name__ == '__main__':
         hog_features = hog(testing, orientations=12, pixels_per_cell=(16, 16),
                            cells_per_block=(1, 1))
         result_type = clf.predict(hog_features)
-        Image.open(i).save('../2ndacc/AIResults/svmHOG/' + str(identifiers[result_type])+ str(counter)+".jpg")
+        #i[18:-4] - only id part of the filename
+        Image.open(i).save('../2ndacc/AIResults/svmHOG/' + str(identifiers[result_type])+ i[18:-4] +".jpg")
         counter +=1
 
+class Predictor(object):
+    def __init__(self):
+        print "initialized"
 
+    @classmethod
+    def predict(self, source):
+        clf = pickle.load(open("AI/svmhog.detector", "rb"))
+
+        # good/bad
+        identifiers = ['G', 'B']
+
+        print source;
+        testing = imread(source, 1)
+        testing = imresize(testing, (200, 200))
+        hog_features = hog(testing, orientations=12, pixels_per_cell=(16, 16),
+                           cells_per_block=(1, 1))
+        result_type = clf.predict(hog_features)
+        # i[18:-4] - only id part of the filename
+        print "source in predictor is: " + source
+        Image.open(source).save('2ndacc/AIResults/svmHOG1/' + str(identifiers[result_type]) + source[9:-4] + ".jpg")
+        print source[9:-4]
+        return str(identifiers[result_type])

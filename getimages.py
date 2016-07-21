@@ -23,10 +23,12 @@ links = re.findall(regexRule, liked)
 #print links
 
 for link in links:
+    #save with id as the name
     urllib.urlretrieve(link, folder+link[27:51]+extension)
     counter+=1
     name = folder + str(counter)+round+extension
 
+#old method of differentiating between round of AI predictions
 open("identifier.txt", "w").close()
 if (round != "Z"):
     with open("identifier.txt", "w") as text_file:
