@@ -195,6 +195,7 @@ def like_recs_AI():
     #    print "hit an exception i guess"
     #    print ex
 
+
 #while True:
 #    like_recs()
 while True:

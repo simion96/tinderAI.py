@@ -2,3 +2,7 @@ figure out trilateration
 do auto-matching algorithm
 clean up code
 maybe more advanced ai?
+
+
+for next time when hacking
+to superlike, like/userid/super?photoid=[photoid]
