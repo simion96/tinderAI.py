@@ -28,7 +28,6 @@ config = utils.read_file('CONFIG.cfg').splitlines()
 fbToken = config[0]  
 fbID = config[1]     
 print "fbtoken is " + str(fbToken) 
-time.sleep(10)
 
 
 def initialize():
