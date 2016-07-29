@@ -3,40 +3,35 @@ import glob
 import os
 import json
 import time
-
+import utils as utils
 import requests
 import datetime
 
 
+config = utils.read_file('CONFIG.cfg').splitlines()
+fbToken = config[0]  
+fbID = config[1]     
+print "fbtoken is " + str(fbToken) 
 
-fbToken = os.getenv('FB_TOKEN')
-fbID = os.getenv('FB_ID')
 
-def byteify(input):
-    if isinstance(input, dict):
-        return {byteify(key): byteify(value)
-                for key, value in input.iteritems()}
-    elif isinstance(input, list):
-        return [byteify(element) for element in input]
-    elif isinstance(input, unicode):
-        return input.encode('utf-8')
-    else:
-        return input
+source = glob.glob("2ndacc/to_correct/*")
+ids = []
+profiles = []
+print source
+for i in source:
+    ids.append(i[19:43])
+    print i[19:43]
 
-def pp_json(json_thing, sort=True, indents=4):
-    if type(json_thing) is str:
-        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
-    else:
-        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
-    return None
+profiles = []
+with open('liked', 'r') as input:
+    for line in input:
+        for id in ids:
+            if id in line:
+                profiles.append(str(id) + " "  + str(utils.get_url(line)))
+                #print "found one - " + str(id) + " url is " + str(utils.get_url(line))
+        #print lines[9:33]
+#print profiles
 
-def write_file(file, data):
-    with open(file, 'w') as outfile:
-        outfile.write(data)
-
-def read_file(file):
-    with open(file, 'r') as outfile:
-        return outfile.read()
 
 def initialize():
     url = 'https://api.gotinder.com/auth'
@@ -61,8 +56,18 @@ tinder_headers = {'X-Auth-Token': tinder_token,
                   }
 print tinder_headers
 
-source = glob.glob("2ndacc/to_correct/*")
-print source
-for i in source:
-    print i[19:43]
-
+for profile in profiles:
+    try:
+        current = profile.split(' ')
+        #current0 = id, current1 = link to first pic
+        link = 'https://api.gotinder.com/like/{0}'.format(current[0])
+        liking_header = {'X-Auth-Token': tinder_token,
+                            'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),
+                            'firstPhotoID': ''+str(current[1])
+                            }
+        likereq = requests.get(link, headers = liking_header)
+        print 'status: ' + str(likereq.status_code) + ' text: ' + str(likereq.text)
+        print str(current[0]) + " "  + str(current[1])
+    except Exception as ex:
+        print "hit an exception i guess"
+        print ex

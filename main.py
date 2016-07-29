@@ -20,40 +20,16 @@ from PIL import Image
 from AI.predictor import Predictor
 import scipy.misc
 import warnings
+import utils as utils
 warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 
-def write_file(file, data):
-    with open(file, 'w') as outfile:
-        outfile.write(data)
 
-def read_file(file):
-    with open(file, 'r') as outfile:
-        return outfile.read()
-
-
-config = read_file('CONFIG.cfg').splitlines()
-
+config = utils.read_file('CONFIG.cfg').splitlines()
 fbToken = config[0]  
 fbID = config[1]     
 print "fbtoken is " + str(fbToken) 
+time.sleep(10)
 
-def byteify(input):
-    if isinstance(input, dict):
-        return {byteify(key): byteify(value)
-                for key, value in input.iteritems()}
-    elif isinstance(input, list):
-        return [byteify(element) for element in input]
-    elif isinstance(input, unicode):
-        return input.encode('utf-8')
-    else:
-        return input
-
-def pp_json(json_thing, sort=True, indents=4):
-    if type(json_thing) is str:
-        print(json.dumps(json.loads(json_thing), sort_keys=sort, indent=indents))
-    else:
-        print(json.dumps(json_thing, sort_keys=sort, indent=indents))
-    return None
 
 def initialize():
     url = 'https://api.gotinder.com/auth'
@@ -66,7 +42,6 @@ def initialize():
     return rjson['token']
 
 tinder_token = initialize()
-
 
 #print 'token is: ' + str(fbToken)
 #print 'fbid is: ' + str(fbID)
@@ -91,7 +66,7 @@ def get_recs():
         json.dump(r.text, outfile, sort_keys=True, indent=4)
     with open('data.txt') as data_file:
         recs_json = json.load(data_file)
-    recs_json2 = byteify(recs_json)
+    recs_json2 = utils.byteify(recs_json)
     print r.url
     print r.headers
     print r.request
@@ -107,8 +82,8 @@ def like_recs():
     try:
         while counter < 20:
             results = get_recs()
-            liked = read_file("liked")
-            instagrams = read_file("instagrams")
+            liked = utils.read_file("liked")
+            instagrams = utils.read_file("instagrams")
             for i in results:
                 time.sleep(1)
                 link = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
@@ -128,8 +103,8 @@ def like_recs():
                 except KeyError as ex:
                     print 'nah mate'
                 #print "photoid " + str(i['photos'][0]['id'])
-            write_file("liked", liked)
-            write_file("instagrams", instagrams)
+            utils.write_file("liked", liked)
+            utils.write_file("instagrams", instagrams)
             counter += 1
 
     except Exception as ex:
@@ -157,8 +132,8 @@ def like_recs_AI():
         #try:
         while True:
             results = get_recs()
-            liked = read_file("liked")
-            instagrams = read_file("instagrams")
+            liked = utils.read_file("liked")
+            instagrams = utils.read_file("instagrams")
             for i in results:
                 time.sleep(1)
                 like = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
@@ -192,8 +167,8 @@ def like_recs_AI():
                 except KeyError as ex:
                     print 'nah mate'
                     # print "photoid " + str(i['photos'][0]['id'])
-            write_file("liked", liked)
-            write_file("instagrams", instagrams)
+            utils.write_file("liked", liked)
+            utils.write_file("instagrams", instagrams)
             counter += 1
 
     except Exception as ex:
