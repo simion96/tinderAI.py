@@ -5,7 +5,29 @@ import json
 config = utils.read_file('CONFIG.cfg').splitlines()
 fbToken = config[0]  
 fbID = config[1]
-id = "577c21342e59a643122ad465"
+#id = "577c21342e59a643122ad465"
+#id = "5727a450cf8096b21fa31d7d" #Tashan Jehuty Rayleonard
+#id = "55bfdcea909b20b824165988" #"Tony Fishman Lagarde
+#id = "529db81422665fc16800001e" #Samuel Evans
+#id = "540f69ba6cd05aff3543cbc8" #Joe Bell
+#id = "5286a1e99f843c7f61000016" #Anthony Stec
+#id = "575c82cd7553e1b41bb67465" #Alexander Miles
+#id = "53e6207582d63f2e07c17da0" #Messy Uzunov
+#id = "5296e1efca7ddbc760000054" #lucy willibean mair
+#id = "52def403176f1d435c00024e" #Nikhil Thapar
+#id = "5724db6c3380cdcd0b51fb6c" #George Miller
+#id = "572931dc48c488f413c77e69" #Alex Forbes-Reed
+#id = "5775d26658593a0056e354fd" #Vandan Thakkar
+#id = "5371c4c113be222e160058af" #Chloe Combe
+#id = "544b910d1503dac3318ec7ec" #charlie
+id = "559af7b78c7eee597fd27134" #jenny
+#id = "5330eb843ea5c0e3050042c1" #william
+#id = "545fb9e33be7f2825978dd57" #john
+#id = "56c0782dff767763558964c6" #Laura Voinea
+#id = "52ff586a191434912400275a" #aamir
+#id = "5525af7c0a76346559bd92d4" #james lynn
+#id = "578bee806770910c652b68e7" #george
+
 print "fbtoken is " + str(fbToken) 
 
 def initialize():
@@ -30,3 +52,6 @@ def get_updates():
     return r3.text
 
 get_updates()
+
+
+
