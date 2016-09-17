@@ -82,7 +82,7 @@ def like_recs():
         while counter < 20:
             results = get_recs()
             liked = utils.read_file("liked")
-            instagrams = utils.read_file("instagrams")
+            instagrams = utils.read_file("/Instagram/instagrams")
             for i in results:
                 time.sleep(1)
                 link = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
@@ -103,7 +103,7 @@ def like_recs():
                     print 'nah mate'
                 #print "photoid " + str(i['photos'][0]['id'])
             utils.write_file("liked", liked)
-            utils.write_file("instagrams", instagrams)
+            utils.write_file("/Instagram/instagrams", instagrams)
             counter += 1
 
     except Exception as ex:
@@ -132,7 +132,7 @@ def like_recs_AI():
         while True:
             results = get_recs()
             liked = utils.read_file("liked")
-            instagrams = utils.read_file("instagrams")
+            instagrams = utils.read_file("/Instagram/instagrams")
             for i in results:
                 time.sleep(1)
                 like = 'https://api.gotinder.com/like/{0}'.format(i["_id"])
@@ -167,7 +167,7 @@ def like_recs_AI():
                     print 'nah mate'
                     # print "photoid " + str(i['photos'][0]['id'])
             utils.write_file("liked", liked)
-            utils.write_file("instagrams", instagrams)
+            utils.write_file("/Instagram/instagrams", instagrams)
             counter += 1
 
     except Exception as ex:
