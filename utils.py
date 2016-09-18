@@ -3,14 +3,13 @@ import sys
 import os
 import json
 import time
-import urllib2
 from pprint import pprint
 import requests
 import datetime
 import numpy as np
 import re
 import glob
-import urllib
+
 
 regexRule = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
 
