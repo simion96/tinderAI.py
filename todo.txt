@@ -1,5 +1,4 @@
-figure out trilateration
-do auto-matching algorithm
+
 clean up code
 maybe more advanced ai?
 
