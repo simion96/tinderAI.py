@@ -84,8 +84,8 @@ def changeLoc():
                      'X-Auth-Token': tinder_token,
                      'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore')
                      }
-        jsonLoc = {'lat': '51.066209', 'lng': '-0.334493'}
-        r = requests.post(base_url+loc_endpoint, headers = headers, json={"lon": tmplng, "lat":tmplat})
+        jsonLoc = {'lat': '51.112683', 'lng': '-0.188290'}
+        r = requests.post(base_url+loc_endpoint, headers = headers, json={"lat": tmplng, "lon":tmplat})
         print "url is {}, status code is {}, text is {}".format(r.url, r.status_code, r.text)
         print "changed to {} {}".format(lng, lat)
         
@@ -159,6 +159,6 @@ def test():
                 }
     r = requests.get(base_url+friends_endpoint, headers = headers)
     print r.text
-test()
+changeLoc()
 #curLocDec = float(currentLoc[0])
 #print(str(curLocDec[0]))
