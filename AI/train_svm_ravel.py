@@ -7,7 +7,6 @@ import time
 from scipy.misc import imread
 from sklearn.svm import LinearSVC
 from scipy.misc import imread,imsave,imresize
-
 import numpy as np
 import os
 import itertools
@@ -25,11 +24,9 @@ from sklearn.svm import LinearSVC
 import matplotlib
 import pickle
 
-
 good =  glob.glob("./../2ndacc/good/*")
 bad = glob.glob("./../2ndacc/bad/*")
 
-print good
 data = list()
 labels = list()
 good_data = []
@@ -38,24 +35,17 @@ good_labels = []
 for i in range(len(good)):
     for filename in good[i]:
         image = imread(i, 1)
-        #image = imresize(image, (200, 200))
         imr = image.ravel()
         data.append(imr)
-        #good_data.append(image.ravel())
-        #good_labels.append
         labels.append(0)
 
 for i in range(len(bad)):
     for filename in bad[i]:
         image = imread(i, 1)
-        #image = imresize(image, (200, 200))
         imr = image.ravel()
         data.append(imr)
-        #good_data.append(image.ravel())
-        #good_labels.append
         labels.append(1)
 
-print ' training svm'
 clf = LinearSVC(dual=False, verbose=1)
 clf.fit(data, labels)
 pickle.dump(clf, open("svmravel.detector", "wb"))

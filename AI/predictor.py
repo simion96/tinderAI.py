@@ -17,7 +17,6 @@ if __name__ == '__main__':
 
     #good/bad
     identifiers = ['G', 'B']
-
     source = glob.glob("../2ndacc/testing/*")
     print source;
     counter = 0
@@ -41,15 +40,11 @@ class Predictor(object):
 
         # good/bad
         identifiers = ['G', 'B']
-
-        print source;
         testing = imread(source, 1)
         testing = imresize(testing, (200, 200))
         hog_features = hog(testing, orientations=12, pixels_per_cell=(16, 16),
                            cells_per_block=(1, 1))
         result_type = clf.predict(hog_features)
         # i[18:-4] - only id part of the filename
-        #print "source in predictor is: " + source
         Image.open(source).save('2ndacc/AIResults/svmHOG1/' + str(identifiers[result_type]) + source[9:-4] + ".jpg")
-        #print source[9:-4]
         return str(identifiers[result_type])

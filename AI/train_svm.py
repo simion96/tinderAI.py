@@ -29,7 +29,6 @@ import pickle
 good =  glob.glob("./../2ndacc/good/*")
 bad = glob.glob("./../2ndacc/bad/*")
 
-print good
 data = []
 labels = []
 good_data = []
@@ -40,8 +39,6 @@ for i in good:
     image = imresize(image, (200, 200))
     hog_feat = hog(image, orientations=12, pixels_per_cell=(16,16), cells_per_block=(1,1))
     data.append(hog_feat)
-    #good_data.append(image.ravel())
-    #good_labels.append
     labels.append(0)
 
 for i in bad:
@@ -49,8 +46,6 @@ for i in bad:
     image = imresize(image, (200, 200))
     hog_feat = hog(image, orientations=12, pixels_per_cell=(16,16), cells_per_block=(1,1))
     data.append(hog_feat)
-    #good_data.append(image.ravel())
-    #good_labels.append
     labels.append(1)
 
 print ' training svm'

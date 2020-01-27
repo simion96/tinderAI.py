@@ -27,30 +27,19 @@ warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 config = utils.read_file('CONFIG.cfg').splitlines()
 fbToken = config[0]  
 fbID = config[1]     
-print "fbtoken is " + str(fbToken) 
-
 
 def initialize():
     url = 'https://api.gotinder.com/auth'
     headers = {'Content-Type': 'application/json', 'User-Agent': 'Tinder/4.8.2 (iPhone; iOS 9.1; Scale/2.00)'}
     payload = {'force_refresh': 'False', 'facebook_id': fbID, 'facebook_token': fbToken}
     r = requests.post(url, headers=headers, data=json.dumps(payload))
-    #print r.text
     rjson = json.loads(r.text)
-    print "token is: " + rjson['token']
     return rjson['token']
 
 tinder_token = initialize()
-
-#print 'token is: ' + str(fbToken)
-#print 'fbid is: ' + str(fbID)
-
-
-
 tinder_headers = {'X-Auth-Token': tinder_token,
                   'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore')
                   }
-print tinder_headers
 
 #getting reccomandations
 def get_recs():
@@ -66,10 +55,6 @@ def get_recs():
     with open('data.txt') as data_file:
         recs_json = json.load(data_file)
     recs_json2 = utils.byteify(recs_json)
-    print r.url
-    print r.headers
-    print r.request
-    print r.status_code
     dict = json.loads(recs_json2)
     return dict['results']
 
@@ -120,7 +105,6 @@ def get_updates():
                        }
     url3 = 'https://api.gotinder.com/updates'
     r3 = requests.post(url3, headers = tinder_headers3)
-    print json.dumps(json.loads(r3.text), indent=4)
     return r3.text
 
 def like_recs_AI():
@@ -128,7 +112,6 @@ def like_recs_AI():
         folder = "ladiesAI/"
         extension = ".jpg"
         counter = 0
-        #try:
         while True:
             results = get_recs()
             liked = utils.read_file("liked")
@@ -144,20 +127,13 @@ def like_recs_AI():
                 #img - tinder img url, path = path on physical device, urllib saves the picture
                 img = str(i['photos'][0]['url'])
                 path = folder+img[27:51]+extension
-                #print "image is " + str(i['photos'][0]['url'])
                 urllib.urlretrieve(str(i['photos'][0]['url']), path)
                 result = Predictor.predict(path)
-                print 'AIresult is: ' + result
-
                 if result == "G":
                     req = requests.get(like, headers = liking_header)
-                    print 'status: ' + str(req.status_code) + ' text: ' + str(req.text)
                 elif result == "B":
                     req = requests.get(dislike, headers = liking_header)
                     liked += str(i['name']) + ' - ' + str(i['_id']) + ' - ' + str(i['photos'][0]['url']) + '\n'
-                    print 'status: ' + str(req.status_code) + ' text: ' + str(req.text)
-
-                print i['name'] + ' - ' + i['_id']
                 try:
                     if 'instagram' in i:
                         instagrams += str(i['instagram']['username'] + " ")
@@ -165,7 +141,7 @@ def like_recs_AI():
                         print "no instagram mate soz"
                 except KeyError as ex:
                     print 'nah mate'
-                    # print "photoid " + str(i['photos'][0]['id'])
+
             utils.write_file("liked", liked)
             utils.write_file("/Instagram/instagrams", instagrams)
             counter += 1
@@ -174,16 +150,8 @@ def like_recs_AI():
         print "hit an exception i guess"
         print ex
 
-
-#while True:
-#    like_recs()
 while True:
     like_recs_AI()
-
-#print type(recs_json2)
-#pprint(recs_json2)
-
-
 
 like_headers2 = {'X-Auth-Token': tinder_token,
                    'Authorization': 'Token token="{0}"'.format(tinder_token).encode('ascii', 'ignore'),

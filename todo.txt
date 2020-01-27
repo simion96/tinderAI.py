@@ -1,7 +1,2 @@
-
-clean up code
 maybe more advanced ai?
-
-
-for next time when hacking
-to superlike, like/userid/super?photoid=[photoid]
+for next time when hacking - to superlike, like/userid/super?photoid=[photoid]
